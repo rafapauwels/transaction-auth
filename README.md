@@ -2,18 +2,20 @@
 
 This is a simple transaction authorization service, developed as an exercise for Nubank's hiring process.
 
-## Installation
+---
+## **Installation**
 
 To install the project simply unzip the attached package. 
 It should contain all the relevant files for the project, including source, tests, Dockerfile and an artifact.
 
 For building this project it will also be essencial to have leiningen working.
 
-## Build
+---
+## **Build**
 
 This project uses Leiningen as a manager for the project.
 
-Therefore you can un unit and integration tests via (more about this [here](#tests))
+Therefore you can run unit and integration tests via (more about this [here](#tests))
 ```
 $ lein midje
 ```
@@ -22,15 +24,17 @@ and build your uberjar with
 $ lein uberjar
 ```
 
-## Dependencies
+---
+## **Dependencies**
 
 WRITE ABOUT DEPENCENCIES HERE
 
-## Firing up the server
+---
+## **Firing up the server**
 
 You can either run this service locally or via docker, being docker the preferred way.
 
-### Docker
+### **Docker**
 
 This method assumes a working Docker installation, if that is not the case refer to [the local usage guide](#local).
 
@@ -46,17 +50,21 @@ The current instance ip and running port should appear, along with the startup i
 
 If you wish to keep the built instance in your local docker be sure to remove the `--rm` tag from the command above.
 
-### Local
+### **Local**
 
 The local method for running the project needs only a working JRE.
 
-To start the service you need either to build the project and enter the *target/uberjar* directory **OR** enter the docker folder, which contains a built artifact.
+To start the service you need either to build the project and enter the *target/uberjar* directory **OR** enter the *docker* folder, which contains a built artifact.
 
 Once in the correct folder run
 ```
 $ java -jar transaction-authorization-1.0.0-SNAPSHOT-standalone.jar
 ```
-## Consuming the service
+
+This will start the server and displayed on your terminal the exposed port alongside with your ip and startup information provided by http-kit.
+
+---
+## **Consuming the service**
 
 The endpoints created by this service are
 
@@ -65,11 +73,12 @@ The endpoints created by this service are
 > POST /transactions
 
 As soon as the service starts running it will display both the current IP address and the exposed port.
-From there you can use any application such as Postman or even curl to consume the service. 
+From there you can use any application such as Postman or even curl to consume the service.
 
-Note that the expected http verb is POST for both routes and you should provide a body such as
 
-*new account body example*
+Note that the expected http verb is POST for both routes and you should provide a body such as the examples below
+
+*new account example*
 
 ```json
 {
@@ -91,4 +100,15 @@ Note that the expected http verb is POST for both routes and you should provide 
 	}
 }
 ```
-## Tests
+
+---
+## **Tests**
+
+WRITE ABOUT SELVAGE FLOW AND MIDJE (maybe about non mocked db)
+
+---
+## **File architecture**
+
+WRITE ABOUT LOGIC | ADAPTER | DB
+
+## **Database**
