@@ -3,7 +3,9 @@
   (:require [transaction-authorization.controller :as controller]
             [org.httpkit.server :as server]
             [compojure.core :refer :all]
-            [clojure.edn :as edn]))
+            [clojure.edn :as edn])
+  (:import [java.net InetAddress]))
+          
 
 (defn new-account-endpoint [request]
   (let [req-body (slurp (:body request))
@@ -29,6 +31,6 @@
 (defn -main
   "'lein run' entry-point"
   [& args]
-  (let [port (edn/read-string (or (System/getenv "PORT") "9443"))]
-    (println (str "Starting at " port "..."))
+  (let [port (edn/read-string (or (System/getenv "APP_PORT") "9443"))]
+    (println (str "Starting at " (.getHostAddress (InetAddress/getLocalHost)) ":" port))
     (start-and-run! port)))

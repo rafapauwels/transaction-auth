@@ -1,5 +1,5 @@
 FROM openjdk:8-jre-alpine
-ENV PORT 443
-EXPOSE 443
-COPY transaction-authorization.jar /transaction-auth.jar
-CMD ["/usr/bin/java", "-jar", "/transaction-auth.jar"]
+ENV APP_PORT 80
+EXPOSE 80
+COPY transaction-authorization-1.0.0-SNAPSHOT-standalone.jar /opt/apl/transaction-authorization.jar
+CMD ["/usr/bin/java", "-jar", "/opt/apl/transaction-authorization.jar"]

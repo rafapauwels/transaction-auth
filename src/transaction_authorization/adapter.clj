@@ -4,9 +4,9 @@
 (defn json->map [json-data]
   (try
     (json/read-str json-data :key-fn keyword)
-    (catch java.io.EOFException e nil)))
+    (catch Exception e nil)))
 
 (defn map->json [map-data]
   (try
     (json/write-str map-data)
-    (catch java.io.EOFException e nil)))
+    (catch Exception e nil)))
