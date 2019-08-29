@@ -1,8 +1,15 @@
-(ns transaction-authorization.logic)
+(ns transaction-authorization.logic
+  (:require [transaction-authorization.util :as util]))
 
 (defn new-account [active-card available-limit]
   {:active-card     active-card
    :available-limit available-limit})
+
+(defn less-than-2-minutes? [timediff]
+  (and (= 0 (:years timediff))
+       (= 0 (:days timediff))
+       (= 0 (:hours timediff))
+       (> 2 (:minutes timediff))))
 
 (defn similar-transaction? [current last]
   (and (= (:merchant current) (:merchant last))
@@ -20,9 +27,10 @@
         last-transaction    (first ts)]
     (if (similar-transaction? current-transaction last-transaction)
       (let [current-time (:time current-transaction)
-            last-time    (:time last-transaction)]
-        ()))
-    false))
+            last-time    (:time last-transaction)
+            timediff     (util/datetime-diff last-time current-time)]
+        (if (less-than-2-minutes? timediff) true false))
+      false)))
 
 (defn card-blocked? 
   "No transaction should be allowed if the card is blocked"
@@ -32,9 +40,12 @@
 (defn high-frequency? 
   "There should be no more than 3 transactions on a 2 minute interval"
   [t ts]
-  ;(println "latest transaction: ") (println t)
-  ;(println "list of transactions: ") (println ts)
-  false)
+  (if (or (nil? ts) (= 1 (count ts)))
+    false
+    (let [current  (:time t)
+          third    (:time (second ts))
+          timediff (util/datetime-diff third current)]
+      (if (less-than-2-minutes? timediff) true false))))
 
 (defn get-violations [t ts account-info]
   {:card-blocked                  (card-blocked? account-info)

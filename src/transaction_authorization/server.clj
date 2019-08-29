@@ -6,16 +6,18 @@
             [clojure.edn :as edn]))
 
 (defn new-account-endpoint [request]
-  (let [body (slurp (:body request))]
-    {:status 200
+  (let [req-body (slurp (:body request))
+        body (controller/new-account req-body)]
+    {:status (if (nil? body) 400 200)
      :headers {"Content-Type" "text/html"}
-     :body (controller/new-account body)}))
+     :body body}))
 
 (defn new-transaction-endpoint [request]
-  (let [body (slurp (:body request))]
-    {:status 200
+  (let [req-body (slurp (:body request))
+        body (controller/new-transaction req-body)]
+    {:status (if (nil? body) 400 200)
      :headers {"Content-Type" "text/html"}
-     :body (controller/new-transaction body)}))
+     :body body}))
 
 (defroutes entry-routes
   (POST "/accounts" [] new-account-endpoint)

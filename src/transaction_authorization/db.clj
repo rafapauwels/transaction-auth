@@ -18,7 +18,8 @@
 
 (defn delete! [target]
   (cond
-    (= target :current-violation) (dosync (ref-set db-current-violation []))))
+    (= target :current-violation) (dosync (ref-set db-current-violation []))
+    (= target :mock-account)      (dosync (ref-set db-account nil))))
 
 (defn get! [target]
   (cond

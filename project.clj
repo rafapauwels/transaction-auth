@@ -3,11 +3,14 @@
   :url ""
   :license {:name "GNU GPL 3.0"
             :url "https://www.gnu.org/licenses/gpl-3.0.en.html"}
-  :dependencies [[org.clojure/clojure "1.10.0"]
-                 [org.clojure/data.json "0.2.6"]
+  :plugins [[lein-midje "3.2.1"]]
+  :dependencies [[org.clojure/data.json "0.2.6"]
+                 [org.clojure/clojure "1.10.0"]
                  [ring/ring-defaults "0.3.2"]
                  [http-kit "2.3.0"]
                  [compojure "1.6.1"]]
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}}
+  :profiles {:dev {:dependencies [[midje "1.9.1"]
+                                  [nubank/selvage "0.0.1"]]}
+             :uberjar {:aot :all}}
   :main ^{:skip-aot true} transaction-authorization.server)

@@ -27,9 +27,10 @@
   ([] 
    (account-state "camel"))
   ([notation]
-   (let [account    (db/get! :account)]
-     (if (= notation "camel")
-       {:account {:activeCard     (:active-card account)
-                  :availableLimit (:available-limit account)}}
-       {:account {:active-card     (:active-card account)
-                  :available-limit (:available-limit account)}}))))
+   (let [account (db/get! :account)]
+     (when (not (nil? account))
+       (if (= notation "camel")
+         {:account {:activeCard     (:active-card account)
+                    :availableLimit (:available-limit account)}}
+         {:account {:active-card     (:active-card account)
+                    :available-limit (:available-limit account)}})))))
