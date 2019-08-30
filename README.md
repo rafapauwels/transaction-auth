@@ -52,6 +52,8 @@ The current instance ip and running port should appear, along with the startup i
 
 If you wish to keep the built instance in your local docker be sure to remove the `--rm` tag from the command above.
 
+Also note that if the source is built from scratch the standalone uberjar needs to be moved to the docker folder.
+
 ### **Local**
 
 The local method for running the project needs only a working JRE.
@@ -167,7 +169,7 @@ The in-memory database holds four refs:
 which works in a similar way to tradicional tables on a SQL database. 
 The db namespace also holds the functions get!, patch!, post! and delete!
 
-**get** enables querying via `deref`
+**get** enables querying data, basically via a `deref`
 
 **post** provides a way to create and store new resources
 
