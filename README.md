@@ -27,12 +27,14 @@ $ lein uberjar
 ---
 ## **Dependencies**
 
-WRITE ABOUT DEPENCENCIES HERE
+On production this project dependencies are mainly `data.json` for json parsing, `http-kit` for serving the endpoints and `compojure` for routing inside the application.
+
+In development it is necessary both `midje` and `selvage` for unit and integration testing.
 
 ---
-## **Firing up the server**
+## **Running the server**
 
-You can either run this service locally or via docker, being docker the preferred way.
+You can either start this service locally or via docker, being docker the preferred way.
 
 ### **Docker**
 
@@ -104,11 +106,78 @@ Note that the expected http verb is POST for both routes and you should provide 
 ---
 ## **Tests**
 
-WRITE ABOUT SELVAGE FLOW AND MIDJE (maybe about non mocked db)
+Midje was the unit testing framework choosen, I didn't unit test unpure functions since the integration tests via flow provided an unmocked environment for testing such functions.
+
+Integration tests used `selvage.flow` alongside with `midje` for providing an end-to-end testing environment for account creation and for the transaction authorization flow.
+
+Since the database is volatile, in-memory only and the whole service does not rely on outside resources the only mocked parts were the inputs, which are mocked as a map such as
+
+```clojure
+{:body (.getBytes (json))}
+```  
+
+### **Running the tests**
+```
+lein midje
+```
 
 ---
 ## **File architecture**
+The functions are distributed in a manner that tries to follow the hexagonal architecture
 
-WRITE ABOUT LOGIC | ADAPTER | DB
+### **Logic**
+Encapsulates all the business rules. That includes what is an account, what is a transaction and what are the violations that can happen in an authorization flow.
 
+All functions here are pure, that is, it doesn't cause side-effects neither throw exceptions.
+
+### **Adapter**
+Holds conversions between formats. In this case that is the input json to a clojure map and the otherway around. Also responsible for stopping any input that is not a json.
+
+### **Controller**
+Orquestrate all the layers, is core between the requests and business rules. 
+
+### **Server**
+The entry point, responsible for starting the server, defining the endpoints and properly routing the requests.
+
+### **Port**
+The gateway between components like a database, kafka, mq or any other outside service.
+
+### **Util**
+Handles some of the necessary java interops for handling zoned datetimes.
+
+### **Validator**
+Defines what is a valid request, must be clojure map which contains given keys
+
+### **Db**
+In-memory database. [More below](#database).
+
+---
 ## **Database**
+
+The in-memory database holds four refs:
+
+>account
+
+>transactions history
+
+>violations history
+
+>current violation
+
+which works in a similar way to tradicional tables on a SQL database. 
+The db namespace also holds the functions get!, patch!, post! and delete!
+
+**get** enables querying via `deref`
+
+**post** provides a way to create and store new resources
+
+**patch** alters the content of a resource, in this case it is used to alter an account's limit
+
+**delete** is used for the violation stashing process and deleting the mock account created during integration tests.
+
+### **Violation stash**
+Every violation is stored forever*, without exceptions. 
+
+So to avoid an overhead treating which exceptions ocurred during each transaction, everytime a violation is detected it is **post** to the current violation ref and later, when our controller starts stiching the request answer it moves everything from the current violation to the violation history array.
+
+##### *Forever being the lifetime of our service.

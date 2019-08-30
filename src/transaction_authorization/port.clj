@@ -1,9 +1,6 @@
 (ns transaction-authorization.port
   (:require [transaction-authorization.db :as db]))
 
-;; receives the http calls, passing it on to the controller
-;; connection gateway to the in-memory database
-
 (defn edit-account! [keyword acc] (db/patch! keyword acc))
 
 (defn save-account! [acc] (db/post! :account acc))

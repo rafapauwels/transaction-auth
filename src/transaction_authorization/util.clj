@@ -8,7 +8,9 @@
     (boolean (ZonedDateTime/parse d))
     (catch DateTimeException e false)))
 
-(defn datetime-diff [dd d]
+(defn datetime-diff 
+  "Subtracts dd from d, being both ZonedDateTime"
+  [dd d]
   (let [date (ZonedDateTime/parse d)
         second-date (ZonedDateTime/parse dd)]
     {:years   (- (.getYear date) (.getYear second-date))
