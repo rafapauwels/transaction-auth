@@ -30,7 +30,7 @@
     (adapter/map->json (conj account-state current-violation))))
 
 (defn new-account 
-  "GLues the account creation flow, validates the request, maps the json and returns an answer to the client"
+  "Glues the account creation flow, validates the request, maps the json and returns an answer to the client"
 [account]
   (when (not (empty-body? account))
     (let [mapped-account (adapter/json->map account)
