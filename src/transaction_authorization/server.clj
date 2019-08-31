@@ -16,11 +16,13 @@
     {:status 400}))
 
 (defn new-transaction-endpoint [request]
-  (let [req-body (slurp (:body request))
-        body (controller/new-transaction req-body)]
-    {:status (if (nil? body) 400 200)
-     :headers {"Content-Type" "text/html"}
-     :body body}))
+  (if (not (nil? (:body request)))
+    (let [req-body (slurp (:body request))
+          body (controller/new-transaction req-body)]
+      {:status (if (nil? body) 400 200)
+       :headers {"Content-Type" "text/html"}
+       :body body})
+    {:status 400}))
 
 (defroutes entry-routes
   (POST "/accounts" [] new-account-endpoint)

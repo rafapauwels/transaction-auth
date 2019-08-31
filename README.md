@@ -8,7 +8,7 @@ This is a simple transaction authorization service, developed as an exercise for
 To install the project simply unzip the attached package. 
 It should contain all the relevant files for the project, including source, tests, Dockerfile and an artifact.
 
-For building this project it will also be essencial to have leiningen working.
+For building this project it will also be essential to have leiningen working.
 
 ---
 ## **Build**
@@ -27,14 +27,14 @@ $ lein uberjar
 ---
 ## **Dependencies**
 
-On production this project dependencies are mainly `data.json` for json parsing, `http-kit` for serving the endpoints and `compojure` for routing inside the application.
+This project dependencies are mainly `data.json` for json parsing, `http-kit` for serving the endpoints and `compojure` for routing inside the application.
 
 In development it is necessary both `midje` and `selvage` for unit and integration testing.
 
 ---
 ## **Running the server**
 
-You can either start this service locally or via docker, being docker the preferred way.
+You can start this service locally or via docker, being docker the preferred way.
 
 ### **Docker**
 
@@ -108,7 +108,7 @@ Note that the expected http verb is POST for both routes and you should provide 
 ---
 ## **Tests**
 
-Midje was the unit testing framework choosen, I didn't unit test unpure functions since the integration tests via flow provided an unmocked environment for testing such functions.
+Midje was the unit testing framework chosen, I didn't unit test unpure functions since the integration tests via flow provided an unmocked environment for testing such functions.
 
 Integration tests used `selvage.flow` alongside with `midje` for providing an end-to-end testing environment for account creation and for the transaction authorization flow.
 
@@ -133,10 +133,10 @@ Encapsulates all the business rules. That includes what is an account, what is a
 All functions here are pure, that is, it doesn't cause side-effects neither throw exceptions.
 
 ### **Adapter**
-Holds conversions between formats. In this case that is the input json to a clojure map and the otherway around. Also responsible for stopping any input that is not a json.
+Holds conversions between formats. In this case that is the input json to a clojure map and the other way around. Also responsible for stopping any input that is not a json.
 
 ### **Controller**
-Orquestrate all the layers, is core between the requests and business rules. 
+Orchestrate all the layers, is core between the requests and business rules. 
 
 ### **Server**
 The entry point, responsible for starting the server, defining the endpoints and properly routing the requests.
@@ -166,7 +166,7 @@ The in-memory database holds four refs:
 
 >current violation
 
-which works in a similar way to tradicional tables on a SQL database. 
+which works in a similar way to traditional tables on a SQL database. 
 The db namespace also holds the functions get!, patch!, post! and delete!
 
 **get** enables querying data, basically via a `deref`
@@ -180,6 +180,6 @@ The db namespace also holds the functions get!, patch!, post! and delete!
 ### **Violation stash**
 Every violation is stored forever*, without exceptions. 
 
-So to avoid an overhead treating which exceptions ocurred during each transaction, everytime a violation is detected it is **post** to the current violation ref and later, when our controller starts stiching the request answer it moves everything from the current violation to the violation history array.
+So to avoid an overhead treating which exceptions occurred during each transaction, every time a violation is detected it is **post** to the current violation ref and later, when our controller starts stitching the request answer it moves everything from the current violation to the violation history array.
 
 ##### *Forever being the lifetime of our service.

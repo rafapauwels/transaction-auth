@@ -5,12 +5,15 @@
 (defn account 
   "Defines the account archetype"
   [account]
-  (let [account-data (:account account)]
+  (let [account-data   (:account account)
+        account-exists (port/has-account?)]
     (if (and
          (boolean? (:activeCard     account-data))
          (number?  (:availableLimit account-data))
-         (not (port/has-account?)))
-      account-data)))
+         (not account-exists))
+      account-data
+      (when (not account-exists)
+        :bad-format))))
 
 (defn transaction 
   "Defines the transaction archetype"

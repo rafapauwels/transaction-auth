@@ -35,14 +35,16 @@
   (when (not (empty-body? account))
     (let [mapped-account (adapter/json->map account)
           valid-account  (validator/account mapped-account)]
-      (if (boolean mapped-account)
-        (do (if (boolean valid-account)
-              (do (let [account (logic/new-account (:activeCard valid-account)
-                                                   (:availableLimit valid-account))]
-                    (port/save-account! account)))
-              (port/add-violations! [:illegal-account-reset]))
+      (when (boolean mapped-account)
+        (if (and (not (nil? valid-account))
+                 (not (= :bad-format valid-account))) 
+          (let [account (logic/new-account (:activeCard valid-account)
+                                           (:availableLimit valid-account))]
+            (port/save-account! account)
             (return-account))
-        nil))))
+          (when (nil? valid-account) 
+            (port/add-violations! [:illegal-account-reset])
+            (return-account)))))))
 
 (defn new-transaction 
   "Glues the whole transaction flow, validates the request, maps the json, authorizes and returns an answer to the client"
